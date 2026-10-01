@@ -33,13 +33,17 @@ jobs:
 
       - name: Find Flutter project
         run: |
-          PUBSPEC=$(find project -name pubspec.yaml -type f | head -n 1)
+          PUBSPEC=$(find project -name pubspec.yaml -print -quit)
           echo "PUBSPEC=$PUBSPEC" >> $GITHUB_ENV
           echo "PROJECT_DIR=$(dirname "$PUBSPEC")" >> $GITHUB_ENV
 
       - name: Get packages
         working-directory: ${{ env.PROJECT_DIR }}
         run: flutter pub get
+
+      - name: Migrate Android project
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: flutter create --platforms=android .
 
       - name: Build APK
         working-directory: ${{ env.PROJECT_DIR }}
